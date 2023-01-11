@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 import com.example.utiks.ConsoleColors;
 
@@ -33,7 +31,7 @@ public class TaskManager {
                     break;
 
                 case "exit":
-                    System.exit(0);
+                    exitTask();
 
                 default:
                     System.out.println("Please select correct option");
@@ -41,19 +39,32 @@ public class TaskManager {
         }
     }
 
-    private static void listTask(Path pathTasks) throws IOException {
-        List<String> list2 = Files.readAllLines(pathTasks);
-        int counter = 0;
-        for (String s : list2) {
-            System.out.println(counter + " : " + s);
-            counter++;
+    private static void start() {
+        System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
+        System.out.println("add");
+        System.out.println("remove");
+        System.out.println("list");
+        System.out.println("exit" + "\n");
+    }
+
+    private static void addTask() throws IOException {
+        Scanner scanAdd = new Scanner(System.in);
+        System.out.println(ConsoleColors.GREEN + "Please add task description" + ConsoleColors.RESET);
+        String description = scanAdd.nextLine();
+        System.out.println(ConsoleColors.GREEN + "Please add task data" + ConsoleColors.RESET);
+        String taskData = scanAdd.nextLine();
+        System.out.println(ConsoleColors.GREEN + "Is your task is important: true/false" + ConsoleColors.RESET);
+        boolean importantTask = scanAdd.nextBoolean();
+        try (FileWriter fileWriter = new FileWriter("tasks.csv", true)) {
+            fileWriter.append(description + ", " + taskData + ", " + importantTask + "\n");
         }
+        System.out.println();
     }
 
     private static void removeTask(Path pathTasks) throws IOException {
         Scanner scanRemove = new Scanner(System.in);
         List<String> list = Files.readAllLines(pathTasks);
-        System.out.println("Please select number to remove");
+        System.out.println(ConsoleColors.RED + "Please select number to remove" + ConsoleColors.RESET);
         int num = scanRemove.nextInt();
         while (num < 0) {
             System.out.println("Please give number greater or equal 0");
@@ -64,24 +75,18 @@ public class TaskManager {
         System.out.println("Value was sucessfully deleted");
     }
 
-    private static void addTask() throws IOException {
-        Scanner scanAdd = new Scanner(System.in);
-        System.out.println("Please add task description");
-        String description = scanAdd.nextLine();
-        System.out.println("Please add task data");
-        String taskData = scanAdd.nextLine();
-        System.out.println("Is your task is important: true/false");
-        boolean importantTask = scanAdd.nextBoolean();
-        try (FileWriter fileWriter = new FileWriter("tasks.csv", true)) {
-            fileWriter.append(description + ", " + taskData + ", " + importantTask + "\n");
+    private static void listTask(Path pathTasks) throws IOException {
+        List<String> list = Files.readAllLines(pathTasks);
+        int counter = 0;
+        for (String s : list) {
+            System.out.println(counter + " : " + s);
+            counter++;
         }
+        System.out.println();
     }
 
-    private static void start() {
-        System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
-        System.out.println("add");
-        System.out.println("remove");
-        System.out.println("list");
-        System.out.println("exit");
+    private static void exitTask() {
+        System.out.println(ConsoleColors.RED + "Program closed");
+        System.exit(0);
     }
 }
