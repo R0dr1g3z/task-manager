@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -72,7 +71,7 @@ public class TaskManager {
         }
         list.remove(num);
         Files.write(pathTasks, list);
-        System.out.println("Value was sucessfully deleted");
+        System.out.println(ConsoleColors.RED + "Value was sucessfully deleted" + ConsoleColors.RESET + "\n");
     }
 
     private static void listTask(Path pathTasks) throws IOException {
