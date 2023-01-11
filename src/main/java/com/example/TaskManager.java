@@ -12,6 +12,10 @@ import com.example.utiks.ConsoleColors;
 
 public class TaskManager {
     public static void main(String[] args) throws IOException {
+        taskManager();
+    }
+
+    private static void taskManager() throws IOException {
         Path pathTasks = Paths.get("tasks.csv");
         Scanner scan = new Scanner(System.in);
         start();
